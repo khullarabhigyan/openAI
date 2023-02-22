@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Property Search</title>
+    <style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+
+      @keyframes fade-in {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+
+      .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100px;
+      }
+
+      .loading div {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: #333;
+        margin: 0 5px;
+        animation: spin 1s linear infinite;
+      }
+
+      .property-info {
+        animation: fade-in 1s;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="https://unpkg.com/react/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom/umd/react-dom.development.js"></script>
+    <script>
+      const { useState } = React;
+
+      function PropertySearch() {
+        const [address, setAddress] = useState('');
+        const [propertyType, setPropertyType] = useState('house');
+        const [propertyInfo, setPropertyInfo] = useState(null);
+        const [loading, setLoading] = useState(false);
+
+        const handleAddressChange = (event) => {
+          setAddress(event.target.value);
+        }
+
+        const handlePropertyTypeChange = (event) => {
+          setPropertyType(event.target.value);
+        }
+
+        const handleSearchClick = () => {
+          setLoading(true);
+
+          // Make API request to search for property based on address and property type
+          // Set propertyInfo state with response data
+          setPropertyInfo({ 
+            address: '123 Main St',
+            type: 'house',
+            price: '$500,000',
+            bedrooms: 3,
+            bathrooms: 2,
+            sqft: 2000,
+          });
+
+          setLoading(false);
+        }
+
+        return (
+          <div>
+            <form>
+              <label>
+                Address:
+                <input type="text" value={address} onChange={handleAddressChange} />
+              </label>
+              <label>
+                Property Type:
+                <select value={propertyType} onChange={handlePropertyTypeChange}>
+                  <option value="house">House</option>
+                  <option value="condo">Condo</option>
+                  <option value="townhouse">Townhouse</option>
+                </select>
+              </label>
+              <button type="button" onClick={handleSearchClick}>Search</button>
+            </form>
+
+            {loading &&
+              <div className="loading">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            }
+
+            {propertyInfo &&
+              <div className="property-info">
+                <h2>Property Info</h2>
+                <p>Address: {propertyInfo.address}</p>
+                <p>Type: {propertyInfo.type}</p>
+                <p>Price: {propertyInfo.price}</p>
+                <p>Bedrooms: {propertyInfo.bedrooms}</p>
+                <p>Bathrooms: {propertyInfo.bathrooms}</p>
+                <p>Sqft: {propertyInfo.sqft}</p>
+              </div>
+            }
+          </div>
+        );
+      }
+
+      ReactDOM.render(<PropertySearch />, document.getElementById('root'));
+    </script>
+  </body>
+</html>
